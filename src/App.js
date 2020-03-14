@@ -6,6 +6,7 @@ import ProfileContainer from "./containers/ProfileContainer";
 import LoginContainer from "./containers/LoginContainer";
 import NewsContainer from "./containers/NewsContainer";
 import HomeContainer from "./containers/HomeContainer";
+import PrivateRoute from "./containers/PrivateRoute";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route exact path="/" component={HomeContainer} />
           <Route path="/news" component={NewsContainer} />
           <Route path="/login" component={LoginContainer} />
-          <Route path="/profile" component={ProfileContainer} />
+          <PrivateRoute path="/profile" component={ProfileContainer} />
           <Route component={NotFound} />
         </Switch>
       </div>

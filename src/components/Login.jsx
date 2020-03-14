@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Login = ({ sign, errMessage }) => {
+const Login = ({ sign, errMessage, location }) => {
   const [redirectToPreviousRoute, setRedirectToPreviousRoute] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const { from } = location.state || { from: { pathname: "/" } };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -16,7 +18,7 @@ const Login = ({ sign, errMessage }) => {
   };
 
   if (redirectToPreviousRoute) {
-    return <Redirect to="/profile" />;
+    return <Redirect to={from} />;
   }
   return (
     <>
