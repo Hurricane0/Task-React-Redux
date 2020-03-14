@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const News = () => {
+const News = ({ data }) => {
   return (
     <div className="page-container">
       <h1>News</h1>
@@ -10,8 +10,7 @@ const News = () => {
   );
 };
 News.propTypes = {
-  user: PropTypes.string,
-  signOut: PropTypes.func
+  data: PropTypes.array.isRequired
 };
 
 export default News;

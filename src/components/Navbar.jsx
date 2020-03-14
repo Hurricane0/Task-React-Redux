@@ -1,10 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Redirect } from "react-router-dom";
 import { signOut } from "../redux/authReducer";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 const Navbar = ({ signOut, user }) => {
+  debugger;
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+
+  const handleSignOut = e => {
+    e.preventDefault();
+    signOut();
+  };
+
+  const renderRedirect = () => {
+    if (redirectToLogin) {
+      return <Redirect to="/login" />;
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
@@ -35,14 +49,25 @@ const Navbar = ({ signOut, user }) => {
           </li>
         </ul>
       </div>
-      {user && (
+      {renderRedirect()}
+      {user ? (
         <form class="form-inline">
           <button
-            onClick={signOut}
+            onClick={handleSignOut}
             class="btn btn-outline-success my-2 my-sm-0"
             type="submit"
           >
             Sign Out
+          </button>
+        </form>
+      ) : (
+        <form class="form-inline">
+          <button
+            onClick={() => setRedirectToLogin(true)}
+            class="btn btn-outline-success my-2 my-sm-0"
+            type="submit"
+          >
+            Sign In
           </button>
         </form>
       )}
@@ -55,7 +80,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  signOut: dispatch(signOut)
+  signOut: () => dispatch(signOut())
 });
 
 Navbar.propTypes = {
