@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Profile = ({ user }) => {
+const Profile = ({ user, getProfile, userId, profileData }) => {
+  useEffect(() => {
+    getProfile(userId);
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <div>
       {user ? (

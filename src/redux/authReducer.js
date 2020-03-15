@@ -4,12 +4,14 @@ const SIGN_OUT = "auth/SIGN_OUT";
 const SIGN_ERROR = "auth/SIGN_ERROR";
 const TOGGLE_IS_FETCHING = "auth/TOGGLE_IS_FETCHING";
 const SET_USER = "auth/SET_USER";
+const SET_PROFILE_DATA = "auth/SET_PROFILE_DATA";
 
 const initialState = {
   user: null,
   errMessage: "",
   isFetching: false,
-  userId: null
+  userId: null,
+  profileData: null
 };
 
 const authReducer = (state = initialState, action) => {
@@ -18,7 +20,8 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: null,
-        userId: null
+        userId: null,
+        profileData: null
       };
     case SIGN_ERROR:
       return {
@@ -36,6 +39,11 @@ const authReducer = (state = initialState, action) => {
         user: action.payload.name,
         userId: action.payload.id
       };
+    case SET_PROFILE_DATA: 
+      return {
+        ...state,
+        profileData: action.payload.data
+      }
     default:
       return state;
   }
@@ -56,7 +64,11 @@ export const toggleIsFetching = isFetching => ({
   }
 });
 
-export const setUser = id => ({
+export const signOut = () => ({
+  type: SIGN_OUT
+});
+
+const setUser = id => ({
   type: SET_USER,
   payload: {
     name: "admin",
@@ -64,6 +76,13 @@ export const setUser = id => ({
   }
 });
 
+const setProfileData = data => ({
+  type: SET_PROFILE_DATA,
+  payload: {
+    data
+  }
+})
+///////////////////////////////REDUX-THUNKS/////////////////////////////
 export const authUser = (email, password, cb) => async dispatch => {
   dispatch(toggleIsFetching(true));
   const data = await authAPI.authUser(email, password);
@@ -77,8 +96,15 @@ export const authUser = (email, password, cb) => async dispatch => {
   }
 };
 
-export const signOut = () => ({
-  type: SIGN_OUT
-});
+export const getProfile = id => async dispatch => {
+  try {
+    dispatch(toggleIsFetching(true));
+    const response = await authAPI.getProfile(id);
+    dispatch(setProfileData(response));
+    dispatch(toggleIsFetching(false));
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 export default authReducer;
