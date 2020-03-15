@@ -1,13 +1,15 @@
 import { connect } from "react-redux";
-import { signIn } from "../redux/authReducer";
+import { authUser } from "../redux/authReducer";
 import Login from "../components/Login";
 
 const mapStateToProps = state => ({
-  errMessage: state.auth.errMessage
+  errMessage: state.auth.errMessage,
+  data: state.auth.data,
+  isFetching: state.auth.isFetching
 });
 
 const mapDispatchToProps = dispatch => ({
-  sign: (params, cb) => dispatch(signIn(params, cb))
+  authUser: (email, password, cb) => dispatch(authUser(email, password, cb))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

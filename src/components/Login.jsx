@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Login = ({ sign, errMessage, location }) => {
+const Login = ({ errMessage, authUser, location, isFetching }) => {
   const [redirectToPreviousRoute, setRedirectToPreviousRoute] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { from } = location.state || { from: { pathname: "/" } };
 
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, [errMessage]);
+
   const handleSubmit = e => {
     e.preventDefault();
 
-    sign({ username, password }, () => {
-      setRedirectToPreviousRoute(true);
-    });
+    authUser(email, password, () => setRedirectToPreviousRoute(true));
   };
 
   if (redirectToPreviousRoute) {
@@ -28,10 +31,10 @@ const Login = ({ sign, errMessage, location }) => {
       >
         <h3 style={{ margin: "20px 0" }}>Use these to enter: </h3>
         <p>
-          <strong>Email:</strong> admin@gmail.com
+          <strong>Email:</strong> max@test.com
         </p>
         <p>
-          <strong>Password:</strong> 0000
+          <strong>Password:</strong> 12345
         </p>
       </div>
       <div className="shadow p-3 mb-5 bg-white rounded">
@@ -44,8 +47,8 @@ const Login = ({ sign, errMessage, location }) => {
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               type="email"
               class="form-control"
               id="exampleInputEmail1"
@@ -66,7 +69,7 @@ const Login = ({ sign, errMessage, location }) => {
             />
           </div>
 
-          <button type="submit" class="btn btn-primary">
+          <button disabled={isFetching} type="submit" class="btn btn-primary">
             Submit
           </button>
         </form>

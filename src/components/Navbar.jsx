@@ -1,22 +1,13 @@
-import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { signOut } from "../redux/authReducer";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 const Navbar = ({ signOut, user }) => {
-  debugger;
-  const [redirectToLogin, setRedirectToLogin] = useState(false);
-
   const handleSignOut = e => {
     e.preventDefault();
     signOut();
-  };
-
-  const renderRedirect = () => {
-    if (redirectToLogin) {
-      return <Redirect to="/login" />;
-    }
   };
 
   return (
@@ -49,27 +40,20 @@ const Navbar = ({ signOut, user }) => {
           </li>
         </ul>
       </div>
-      {renderRedirect()}
       {user ? (
-        <form class="form-inline">
-          <button
-            onClick={handleSignOut}
-            class="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
-            Sign Out
-          </button>
-        </form>
+        <button
+          onClick={handleSignOut}
+          class="btn btn-outline-success my-2 my-sm-0"
+          type="submit"
+        >
+          Sign Out
+        </button>
       ) : (
-        <form class="form-inline">
-          <button
-            onClick={() => setRedirectToLogin(true)}
-            class="btn btn-outline-success my-2 my-sm-0"
-            type="submit"
-          >
+        <Link to="/login">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
             Sign In
           </button>
-        </form>
+        </Link>
       )}
     </nav>
   );

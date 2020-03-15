@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Home = ({ user }) => {
+const Home = ({ user, data }) => {
   return (
     <div className="page-container">
       {!user ? (
