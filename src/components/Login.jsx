@@ -74,7 +74,18 @@ const Login = ({ errMessage, authUser, location, isFetching }) => {
             type="submit"
             className="btn btn-primary"
           >
-            Submit
+            {isFetching ? (
+              <>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                &nbsp; Loading...
+              </>
+            ) : (
+              <span>Submit</span>
+            )}
           </button>
         </form>
       </div>
