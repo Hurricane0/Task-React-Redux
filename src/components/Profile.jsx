@@ -1,22 +1,57 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
+import Preloader from "./Preloader";
 
-const Profile = ({ user, getProfile, userId, profileData }) => {
-  useEffect(() => {
-    getProfile(userId);
-    // eslint-disable-next-line
-  }, []);
-
+const Profile = ({ user, profileData, errMessage, isFetching }) => {
+  if (isFetching) {
+    return <Preloader />;
+  }
   return (
-    <div>
+    <div style={{ paddingTop: "20px" }}>
+      {errMessage && (
+        <div class="alert alert-danger" role="alert">
+          {errMessage}
+        </div>
+      )}
       {user ? (
-        <>
-          <p className="greeting">
-            Hello <strong>{user}</strong>
+        <div className="shadow-sm p-3 mb-5 bg-white rounded">
+          <p style={{ fontSize: "42px" }}>
+            <strong>{user}</strong> profile:
           </p>
-          <p className="example-profile">It is an example of Profile</p>
-        </>
+          <ul className="list-group">
+            <li className="list-group-item">
+              <strong>City: </strong>
+              {profileData.data.city}
+            </li>
+
+            <li className="list-group-item">
+              <strong>Languages: </strong>
+              <ul>
+                {profileData.data.languages.map(language => (
+                  <li key={language}>{language}</li>
+                ))}
+              </ul>
+            </li>
+
+            <li className="list-group-item">
+              <strong>Social Media:</strong>
+              <ul>
+                {profileData.data.social.map(social => (
+                  <li key={social.label}>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={social.link}
+                    >
+                      {social.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          </ul>
+        </div>
       ) : (
         <Redirect to="/login" />
       )}

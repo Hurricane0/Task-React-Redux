@@ -1,15 +1,17 @@
 import { authAPI } from "../api/api";
 
 const SIGN_OUT = "auth/SIGN_OUT";
-const SIGN_ERROR = "auth/SIGN_ERROR";
-const TOGGLE_IS_FETCHING = "auth/TOGGLE_IS_FETCHING";
+const SET_ERROR = "auth/SET_ERROR";
+const TOGGLE_IS_FETCHING_LOGIN = "auth/TOGGLE_IS_FETCHING";
+const TOGGLE_IS_FETCHING_PROFILE = "auth/TOGGLE_IS_FETCHING_PROFILE";
 const SET_USER = "auth/SET_USER";
 const SET_PROFILE_DATA = "auth/SET_PROFILE_DATA";
 
 const initialState = {
   user: null,
   errMessage: "",
-  isFetching: false,
+  isFetchingLogin: false,
+  isFetchingProfile: true,
   userId: null,
   profileData: null
 };
@@ -23,15 +25,20 @@ const authReducer = (state = initialState, action) => {
         userId: null,
         profileData: null
       };
-    case SIGN_ERROR:
+    case SET_ERROR:
       return {
         ...state,
         errMessage: action.payload.errMessage
       };
-    case TOGGLE_IS_FETCHING:
+    case TOGGLE_IS_FETCHING_LOGIN:
       return {
         ...state,
-        isFetching: action.payload.isFetching
+        isFetchingLogin: action.payload.isFetching
+      };
+    case TOGGLE_IS_FETCHING_PROFILE:
+      return {
+        ...state,
+        isFetchingProfile: action.payload.isFetching
       };
     case SET_USER:
       return {
@@ -39,26 +46,32 @@ const authReducer = (state = initialState, action) => {
         user: action.payload.name,
         userId: action.payload.id
       };
-    case SET_PROFILE_DATA: 
+    case SET_PROFILE_DATA:
       return {
         ...state,
         profileData: action.payload.data
-      }
+      };
     default:
       return state;
   }
 };
 
-export const signError = () => ({
-  type: SIGN_ERROR,
+export const setError = errMessage => ({
+  type: SET_ERROR,
   payload: {
-    errMessage: "Email or password is incorrect"
+    errMessage: errMessage
   },
   error: true // https://github.com/redux-utilities/flux-standard-action
 });
 
-export const toggleIsFetching = isFetching => ({
-  type: TOGGLE_IS_FETCHING,
+export const toggleIsFetchingLogin = isFetching => ({
+  type: TOGGLE_IS_FETCHING_LOGIN,
+  payload: {
+    isFetching
+  }
+});
+export const toggleIsFetchingProfile = isFetching => ({
+  type: TOGGLE_IS_FETCHING_PROFILE,
   payload: {
     isFetching
   }
@@ -81,27 +94,34 @@ const setProfileData = data => ({
   payload: {
     data
   }
-})
+});
 ///////////////////////////////REDUX-THUNKS/////////////////////////////
 export const authUser = (email, password, cb) => async dispatch => {
-  dispatch(toggleIsFetching(true));
+  dispatch(toggleIsFetchingLogin(true));
   const data = await authAPI.authUser(email, password);
   if (data.status === "ok") {
     dispatch(setUser(data.data.id));
-    dispatch(toggleIsFetching(false));
-    cb();
+    dispatch(setError(""));
+    dispatch(toggleIsFetchingLogin(false));
+    dispatch(toggleIsFetchingProfile(true))
+    cb(); //Redirect to previous page
   } else {
-    dispatch(signError());
-    dispatch(toggleIsFetching(false));
+    dispatch(setError("Email or password is incorrect"));
+    dispatch(toggleIsFetchingLogin(false));
   }
 };
 
 export const getProfile = id => async dispatch => {
+  dispatch(toggleIsFetchingProfile(true));
   try {
-    dispatch(toggleIsFetching(true));
     const response = await authAPI.getProfile(id);
-    dispatch(setProfileData(response));
-    dispatch(toggleIsFetching(false));
+    if (response.satus === "err") {
+      dispatch(setError(response.message));
+      dispatch(toggleIsFetchingProfile(false));
+    } else {
+      dispatch(setProfileData(response));
+      dispatch(toggleIsFetchingProfile(false));
+    }
   } catch (error) {
     throw new Error(error);
   }

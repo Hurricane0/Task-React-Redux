@@ -39,37 +39,41 @@ const Login = ({ errMessage, authUser, location, isFetching }) => {
       </div>
       <div className="shadow p-3 mb-5 bg-white rounded">
         {errMessage && (
-          <div class="alert alert-danger" role="alert">
+          <div className="alert alert-danger" role="alert">
             {errMessage}
           </div>
         )}
         <form onSubmit={handleSubmit}>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
+          <div className="form-group">
+            <label htmlFor="exampleInputEmail1">Email address</label>
             <input
               value={email}
               onChange={e => setEmail(e.target.value)}
               type="email"
-              class="form-control"
+              className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               It is just a showcase of form working and validation
             </small>
           </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
+          <div className="form-group">
+            <label htmlFor="exampleInputPassword1">Password</label>
             <input
               value={password}
               onChange={e => setPassword(e.target.value)}
               type="password"
-              class="form-control"
+              className="form-control"
               id="exampleInputPassword1"
             />
           </div>
 
-          <button disabled={isFetching} type="submit" class="btn btn-primary">
+          <button
+            disabled={isFetching}
+            type="submit"
+            className="btn btn-primary"
+          >
             Submit
           </button>
         </form>
@@ -78,8 +82,9 @@ const Login = ({ errMessage, authUser, location, isFetching }) => {
   );
 };
 Login.propTypes = {
-  sign: PropTypes.func.isRequired,
-  errMessage: PropTypes.string
+  authUser: PropTypes.func.isRequired,
+  errMessage: PropTypes.string,
+  isFetching: PropTypes.bool.isRequired
 };
 
 export default Login;

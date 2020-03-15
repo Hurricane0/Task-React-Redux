@@ -22,3 +22,14 @@ export const authAPI = {
       });
   }
 };
+
+export const newsAPI = {
+  getNews() {
+    return axios
+      .get("https://mysterious-reef-29460.herokuapp.com/api/v1/news")
+      .then(response => response)
+      .catch(error => {
+        throw new Error(error);
+      });
+  }
+};
