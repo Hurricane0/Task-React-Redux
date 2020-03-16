@@ -14,8 +14,5 @@ const mapStateToProps = state => ({
   data: state.news.newsData,
   isFetchingNews: state.news.isFetchingNews
 });
-//Try to place it in connect
-const mapDispatchToProps = dispatch => ({
-  getNews: () => dispatch(getNews())
-});
-export default connect(mapStateToProps, mapDispatchToProps)(NewsContainer);
+
+export default connect(mapStateToProps, { getNews })(NewsContainer);

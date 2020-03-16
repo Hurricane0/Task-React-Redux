@@ -81,7 +81,7 @@ export const signOut = () => ({
   type: SIGN_OUT
 });
 
-const setUser = id => ({
+export const setUser = id => ({
   type: SET_USER,
   payload: {
     name: "admin",
@@ -95,15 +95,25 @@ const setProfileData = data => ({
     data
   }
 });
+//Saving user id to LocalStorage
+const saveUserLocal = userId => {
+  try {
+    const serializedState = JSON.stringify(userId);
+    localStorage.setItem("userId", serializedState);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 ///////////////////////////////REDUX-THUNKS/////////////////////////////
 export const authUser = (email, password, cb) => async dispatch => {
   dispatch(toggleIsFetchingLogin(true));
   const data = await authAPI.authUser(email, password);
   if (data.status === "ok") {
     dispatch(setUser(data.data.id));
+    saveUserLocal(data.data.id);
     dispatch(setError(""));
     dispatch(toggleIsFetchingLogin(false));
-    dispatch(toggleIsFetchingProfile(true))
+    dispatch(toggleIsFetchingProfile(true));
     cb(); //Redirect to previous page
   } else {
     dispatch(setError("Email or password is incorrect"));

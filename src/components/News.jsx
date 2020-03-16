@@ -1,5 +1,5 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import Preloader from "../components/Preloader";
 
 const News = ({ data, isFetchingNews }) => {
@@ -27,8 +27,9 @@ const News = ({ data, isFetchingNews }) => {
     </>
   );
 };
-// News.propTypes = {
-//   data: PropTypes.array.isRequired
-// };
+News.propTypes = {
+  data: PropTypes.array.isRequired,
+  isFetchingNews: PropTypes.bool
+};
 
 export default News;

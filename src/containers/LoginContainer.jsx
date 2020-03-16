@@ -5,7 +5,8 @@ import Login from "../components/Login";
 const mapStateToProps = state => ({
   errMessage: state.auth.errMessage,
   data: state.auth.data,
-  isFetching: state.auth.isFetchingLogin
+  isFetching: state.auth.isFetchingLogin,
+  user: state.auth.user
 });
 
 const mapDispatchToProps = dispatch => ({

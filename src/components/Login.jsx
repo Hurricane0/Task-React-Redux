@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Login = ({ errMessage, authUser, location, isFetching }) => {
+const Login = ({ errMessage, authUser, location, isFetching, user }) => {
   const [redirectToPreviousRoute, setRedirectToPreviousRoute] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { from } = location.state || { from: { pathname: "/" } };
+
+  useEffect(() => {
+    //Grabing user from LocalStorage
+    if (user) {
+      setRedirectToPreviousRoute(true);
+    }
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     setEmail("");
@@ -95,7 +103,8 @@ const Login = ({ errMessage, authUser, location, isFetching }) => {
 Login.propTypes = {
   authUser: PropTypes.func.isRequired,
   errMessage: PropTypes.string,
-  isFetching: PropTypes.bool.isRequired
+  isFetching: PropTypes.bool.isRequired,
+  user: PropTypes.string
 };
 
 export default Login;
