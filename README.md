@@ -8,6 +8,7 @@ Task source: https://github.com/maxfarseer/tz-webinars/tree/tz-2-react-redux-rou
 
  - Use Redux
  - Home, Profile, Login, News pages controlled by Router
+ - Private Router
  - To log in use email: max@test.com and password: 12345
  - Redirect when user is not logged in
  - Form validation
